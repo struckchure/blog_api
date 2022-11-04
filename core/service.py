@@ -26,10 +26,9 @@ class PostService:
         return PostSerializer(get_object_or_404(Post, id=post_id)).data
 
     def like_post(self, post_id):
-        post = self.get_post(post_id)
+        like = Like.objects.create(post_id=post_id)
 
-        Like.objects.create(post=post)
-
+        post = like.post
         post.likes += 1
         post.save()
 
