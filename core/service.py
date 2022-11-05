@@ -22,6 +22,9 @@ class PostService:
         return post_serializer.data
 
     def get_all_posts(self, title=None, body=None, skip=0, limit=10):
+        skip = abs(int(skip))
+        limit = abs(int(limit))
+
         queryset = Post.objects.filter(
             **remove_none_values(
                 {
@@ -29,7 +32,7 @@ class PostService:
                     "body__contains": body,
                 }
             )
-        )[skip:limit]
+        )[skip : skip + limit]
 
         return PostSerializer(queryset, many=True).data
 
