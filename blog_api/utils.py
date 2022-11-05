@@ -15,3 +15,14 @@ class BaseModel(models.Model):
 
 class BaseView(GenericAPIView):
     pass
+
+
+def remove_none_values(obj):
+    """Remove none values from dict/list"""
+
+    if isinstance(obj, dict):
+        return {k: remove_none_values(v) for k, v in obj.items() if v is not None}
+    elif isinstance(obj, list):
+        return [remove_none_values(v) for v in obj if v is not None]
+    else:
+        return obj
