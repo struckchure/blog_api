@@ -21,9 +21,9 @@ class PostService:
 
         return post_serializer.data
 
-    def get_all_posts(self, title=None, body=None, skip=0, limit=10):
-        skip = abs(int(skip))
-        limit = abs(int(limit))
+    def get_all_posts(self, title=None, body=None, skip=None, limit=None):
+        skip = abs(int(skip or 0))
+        limit = abs(int(limit or 10))
 
         queryset = Post.objects.filter(
             **remove_none_values(
