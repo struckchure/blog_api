@@ -1,7 +1,10 @@
 import uuid
 
 from django.db import models
+from rest_framework import status
 from rest_framework.generics import GenericAPIView
+
+from blog_api import exceptions
 
 
 class BaseModel(models.Model):
@@ -26,3 +29,14 @@ def remove_none_values(obj):
         return [remove_none_values(v) for v in obj if v is not None]
     else:
         return obj
+
+
+def get_object_or_raise_exception(model, **kwargs):
+    """Get object or raise exception"""
+
+    try:
+        return model.objects.get(**kwargs)
+    except model.DoesNotExist:
+        raise exceptions.Exception(
+            f"{model.__name__} not found", code=status.HTTP_404_NOT_FOUND
+        )
